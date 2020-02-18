@@ -1,29 +1,39 @@
-const db = require('../data/dbConfig.js');
+const db = require("../data/dbConfig");
 
-module.exports = {
-  insert,
-  update,
-  remove,
-  getAll,
-  findById,
-};
-
-async function insert(hobbit) {
-  return null;
-}
-
-async function update(id, changes) {
-  return null;
-}
-
-function remove(id) {
-  return null;
-}
-
-function getAll() {
-  return db('hobbits');
+function list() {
+  return db("hobbits");
 }
 
 function findById(id) {
-  return null;
+  return db("hobbits")
+    .where({ id })
+    .first();
 }
+
+async function insert(hobbit) {
+  const [id] = await db("hobbits").insert(hobbit);
+
+  return findById(id);
+}
+
+async function update(id, changes) {
+  await db("hobbits")
+    .where({ id })
+    .update(changes);
+
+  return findById(id);
+}
+
+function remove(id) {
+  return db("hobbits")
+    .where({ id })
+    .del();
+}
+
+module.exports = {
+  list,
+  findById,
+  insert,
+  update,
+  remove
+};
